@@ -61,6 +61,7 @@
         </div>
     </span>
     <ng-template #elseEmptyValueBlock>
-        <span class="adf-textitem-default-value">{{ property.default | translate }}</span>
+        <span ngIf="isHyperlink()" class="adf-textitem-default-value">{{ property.default | translate }}</span>
+        <span ngIf="!isHyperlink()" class="adf-textitem-default-value">formatHyperlink()</span>
     </ng-template>
 </div>
