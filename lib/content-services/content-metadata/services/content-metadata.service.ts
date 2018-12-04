@@ -20,7 +20,7 @@ import { MinimalNodeEntryEntity } from 'alfresco-js-api';
 import { BasicPropertiesService } from './basic-properties.service';
 import { Observable, of } from 'rxjs';
 import { PropertyGroupTranslatorService } from './property-groups-translator.service';
-import { CardViewItem } from '@alfresco/adf-core';
+import { CardViewItem, ObjectUtils } from '@alfresco/adf-core';
 import { CardViewGroup, OrganisedPropertyGroup } from '../interfaces/content-metadata.interfaces';
 import { ContentMetadataConfigFactory } from './config/content-metadata-config.factory';
 import { PropertyDescriptorsService } from './property-descriptors.service';
@@ -44,22 +44,45 @@ export class ContentMetadataService {
     getGroupedProperties(node: MinimalNodeEntryEntity, presetName: string = 'default'): Observable<CardViewGroup[]> {
         let groupedProperties = of([]);
 
+        const config = this.contentMetadataConfigFactory.get(presetName);
+        let groupNames = ['basic'].concat(node.nodeType);
         if (node.aspectNames) {
-            const config = this.contentMetadataConfigFactory.get(presetName),
-                groupNames = node.aspectNames
-                    .concat(node.nodeType)
-                    .filter((groupName) => config.isGroupAllowed(groupName));
+            groupNames = groupNames
+                .concat(node.aspectNames)
+                .filter((groupName) => config.isGroupAllowed(groupName));
 
             if (groupNames.length > 0) {
+                const propertyValues = this.mergeBasicProperties(node);
                 groupedProperties = this.propertyDescriptorsService.load(groupNames).pipe(
                     map((groups) => config.reorganiseByConfig(groups)),
                     map((groups) => this.setTitleToNameIfNotSet(groups)),
-                    map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, node.properties))
+                    map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, propertyValues))
                 );
             }
         }
 
         return groupedProperties;
+    }
+
+    private mergeBasicProperties(node: MinimalNodeEntryEntity) {
+        const basicProperties = {
+            'cm:name': node.name,
+            'cm:creator': node.createdByUser,
+            'cm:created': node.createdAt,
+            'cm:modifier': node.modifiedByUser,
+            'cm:modified': node.modifiedAt
+        };
+
+        let contentProperties = {};
+        if (node.content != null) {
+            contentProperties = {
+                'cm:content.size': node.content.sizeInBytes,
+                'cm:content.mimetype': node.content.mimeType,
+                'cm:content.encoding': node.content.encoding
+            };
+        }
+
+        return ObjectUtils.merge(basicProperties, contentProperties, node.properties);
     }
 
     setTitleToNameIfNotSet(propertyGroups: OrganisedPropertyGroup[]): OrganisedPropertyGroup[] {
