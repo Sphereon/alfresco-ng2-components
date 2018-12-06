@@ -19,6 +19,10 @@
       "MESSAGE": "Deleted file versions cannot be restored. Continue?",
       "YES_LABEL": "Yes",
       "NO_LABEL": "No"
+    },
+    "LABELS": {
+      "MODIFIED_BY": "By",
+      "BC_REGISTRATION_TIME": "Registration time"
     }
   },
   "ADF_CONFIRM_DIALOG": {
