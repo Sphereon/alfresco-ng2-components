@@ -47,6 +47,10 @@ export class VersionManagerComponent {
     @Input()
     node: MinimalNodeEntryEntity;
 
+    /** Toggles showing/hiding Blockchain registration time */
+    @Input()
+    showBlockchainRegistrationTime = true;
+
     /** Toggles showing/hiding of comments. */
     @Input()
     showComments = true;
