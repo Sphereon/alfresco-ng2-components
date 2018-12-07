@@ -89,7 +89,7 @@ export class VersionListComponent implements OnChanges {
     restore(versionId) {
         if (this.canUpdate()) {
             this.versionsApi
-                .revertVersion(this.node.id, versionId, { majorVersion: true, comment: '' })
+                .revertVersion(this.node.id, versionId, {majorVersion: true, comment: ''})
                 .then(() => this.onVersionRestored(this.node));
         }
     }
@@ -99,6 +99,14 @@ export class VersionListComponent implements OnChanges {
         this.versionsApi.listVersionHistory(this.node.id).then((data) => {
             this.versions = data.list.entries;
             this.isLoading = false;
+
+            console.log('Node:');
+            console.log(this.node);
+
+            console.log('Versions:');
+            this.versions.forEach(value => {
+                console.log(value.entry);
+            });
         });
     }
 
