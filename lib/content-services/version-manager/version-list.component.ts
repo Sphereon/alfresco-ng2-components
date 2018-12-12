@@ -44,10 +44,6 @@ export class VersionListComponent implements OnChanges {
     @Input()
     node: MinimalNodeEntryEntity;
 
-    /** Toggles showing/hiding Blockchain registration time */
-    @Input()
-    showBlockchainRegistrationTime = true;
-
     /** Toggles showing/hiding of comments */
     @Input()
     showComments = true;
@@ -59,6 +55,9 @@ export class VersionListComponent implements OnChanges {
     /** Toggles showing/hiding of version actions */
     @Input()
     showActions = true;
+
+    @Input()
+    showBlockchainRegistrationTime = true;
 
     /** Emitted when a version is restored */
     @Output()
@@ -89,24 +88,18 @@ export class VersionListComponent implements OnChanges {
     restore(versionId) {
         if (this.canUpdate()) {
             this.versionsApi
-                .revertVersion(this.node.id, versionId, {majorVersion: true, comment: ''})
+                .revertVersion(this.node.id, versionId, { majorVersion: true, comment: '' })
                 .then(() => this.onVersionRestored(this.node));
         }
     }
 
     loadVersionHistory() {
         this.isLoading = true;
-        this.versionsApi.listVersionHistory(this.node.id).then((data) => {
+        this.versionsApi.listVersionHistory(this.node.id, {
+            include: ['properties']
+        }).then((data) => {
             this.versions = data.list.entries;
             this.isLoading = false;
-
-            console.log('Node:');
-            console.log(this.node);
-
-            console.log('Versions:');
-            this.versions.forEach(value => {
-                console.log(value.entry);
-            });
         });
     }
 
@@ -129,7 +122,7 @@ export class VersionListComponent implements OnChanges {
                 minWidth: '250px'
             });
 
-            dialogRef.afterClosed().subscribe(result => {
+            dialogRef.afterClosed().subscribe((result) => {
                 if (result === true) {
                     this.alfrescoApi.versionsApi
                         .deleteVersion(this.node.id, versionId)
