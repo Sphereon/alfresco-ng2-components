@@ -92,7 +92,9 @@ export class VersionListComponent implements OnChanges {
 
     loadVersionHistory() {
         this.isLoading = true;
-        this.versionsApi.listVersionHistory(this.node.id).then((data) => {
+        this.versionsApi.listVersionHistory(this.node.id, {
+            include: ['properties']
+        }).then((data) => {
             this.versions = data.list.entries;
             this.isLoading = false;
         });
