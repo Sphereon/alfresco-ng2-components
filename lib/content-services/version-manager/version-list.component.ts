@@ -56,6 +56,9 @@ export class VersionListComponent implements OnChanges {
     @Input()
     showActions = true;
 
+    @Input()
+    showBlockchainRegistrationTime = true;
+
     /** Emitted when a version is restored */
     @Output()
     restored: EventEmitter<MinimalNodeEntryEntity> = new EventEmitter<MinimalNodeEntryEntity>();
