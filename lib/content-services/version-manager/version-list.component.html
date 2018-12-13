@@ -7,8 +7,8 @@
             <span class="adf-version-list-item-date"     [id]="'adf-version-list-item-date-' + version.entry.id" >{{version.entry.modifiedAt | date: 'medium'}}</span>
         </p>
         <p mat-line [id]="'adf-version-list-item-bctime-'+ version.entry.id" class="adf-version-list-item-bctime"
-           *ngIf="showBlockchainRegistrationTime">Hello! {{ 'ADF_VERSION_LIST.LABELS.BC_REGISTRATION_TIME' | translate }}
-            {{version.entry.properties['bc:RegistrationTime' | date: 'medium']}}</p>
+           *ngIf="showBlockchainRegistrationTime">{{ 'ADF_VERSION_LIST.LABELS.BC_REGISTRATION_TIME' | translate }}
+            {{version.entry.properties['bc:RegistrationTime'] | date: 'medium'}}</p>
         <p mat-line [id]="'adf-version-list-item-comment-'+ version.entry.id" class="adf-version-list-item-comment"
            *ngIf="showComments">{{version.entry.versionComment}}</p>
 
