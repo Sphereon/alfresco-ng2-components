@@ -95,17 +95,4 @@ export class CardViewTextItemComponent implements OnChanges {
     clicked(): void {
         this.cardViewUpdateService.clicked(this.property);
     }
-
-    isHyperlink(): boolean {
-        const value: string = this.property.default;
-        return (value != null && value.startsWith('[') && value.endsWith('[') && value.indexOf('|') > 1);
-    }
-
-    formatHyperlink(): string {
-        const value: string = this.property.default;
-        const pipeCharPos = value.indexOf('|');
-        const textPart: string = value.substring(1, pipeCharPos);
-        const linkPart: string = value.substring(pipeCharPos + 1, value.length - 1);
-        return '<a href="' + linkPart + '">' + textPart + '<a/>';
-    }
 }
