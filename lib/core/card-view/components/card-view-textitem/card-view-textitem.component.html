@@ -2,12 +2,12 @@
 <div class="adf-property-value">
     <span *ngIf="!isEditable()">
         <span *ngIf="!isClickable(); else elseBlock" [attr.data-automation-id]="'card-textitem-value-' + property.key">
-            <span *ngIf="showProperty()">{{ property.displayValue }}</span>
+            <span *ngIf="showProperty()" [outerHTML]="property.displayValue | hyperlinks"></span>
         </span>
         <ng-template #elseBlock>
         <div class="adf-textitem-clickable" (click)="clicked()" fxLayout="row" fxLayoutAlign="space-between center">
             <span class="adf-textitem-clickable-value" [attr.data-automation-id]="'card-textitem-value-' + property.key">
-                <span *ngIf="showProperty(); else elseEmptyValueBlock">{{ property.displayValue }}</span>
+                <span *ngIf="showProperty(); else elseEmptyValueBlock" [outerHTML]="property.displayValue | hyperlinks"></span>
             </span>
             <mat-icon *ngIf="hasIcon()" fxFlex="0 0 auto" [attr.data-automation-id]="'card-textitem-edit-icon-' + property.icon" class="adf-textitem-icon">{{ property.icon }}</mat-icon>
         </div>
@@ -16,7 +16,7 @@
     <span *ngIf="isEditable()">
         <div *ngIf="!inEdit" (click)="setEditMode(true)" class="adf-textitem-readonly" [attr.data-automation-id]="'card-textitem-edit-toggle-' + property.key" fxLayout="row" fxLayoutAlign="space-between center">
             <span [attr.data-automation-id]="'card-textitem-value-' + property.key">
-                <span *ngIf="showProperty(); else elseEmptyValueBlock">{{ property.displayValue }}</span>
+                <span *ngIf="showProperty(); else elseEmptyValueBlock" [outerHTML]="property.displayValue | hyperlinks"></span>
             </span>
             <mat-icon fxFlex="0 0 auto"
                 [attr.data-automation-id]="'card-textitem-edit-icon-' + property.key"
