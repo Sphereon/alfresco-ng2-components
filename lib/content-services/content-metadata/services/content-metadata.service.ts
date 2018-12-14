@@ -43,21 +43,20 @@ export class ContentMetadataService {
         let groupedProperties = of([]);
 
         const config = this.contentMetadataConfigFactory.get(presetName);
-        let groupNames = ['basic'].concat(node.nodeType);
+        // let groupNames = ['basic'].concat(node.nodeType);
+        let groupNames = [];
         if (node.aspectNames) {
             groupNames = groupNames
                 .concat(node.aspectNames)
                 .filter((groupName) => config.isGroupAllowed(groupName));
-
-            if (groupNames.length > 0) {
-                const propertyValues = this.mergeBasicProperties(node);
-                groupedProperties = this.propertyDescriptorsService.load(groupNames).pipe(
-                    map((groups) => config.reorganiseByConfig(groups)),
-                    map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, propertyValues))
-                );
-            }
         }
-
+        if (groupNames.length > 0) {
+            const propertyValues = this.mergeBasicProperties(node);
+            groupedProperties = this.propertyDescriptorsService.load(groupNames).pipe(
+                map((groups) => config.reorganiseByConfig(groups)),
+                map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, propertyValues))
+            );
+        }
         return groupedProperties;
     }
 
