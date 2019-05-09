@@ -82,11 +82,4 @@ export class ContentMetadataService {
 
         return ObjectUtils.merge(basicProperties, contentProperties, node.properties);
     }
-
-    setTitleToNameIfNotSet(propertyGroups: OrganisedPropertyGroup[]): OrganisedPropertyGroup[] {
-        propertyGroups.map((propertyGroup) => {
-            propertyGroup.title = propertyGroup.title || propertyGroup.name;
-        });
-        return propertyGroups;
-    }
 }
