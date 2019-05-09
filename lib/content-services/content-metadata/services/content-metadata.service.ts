@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { MinimalNodeEntryEntity } from 'alfresco-js-api';
-import { BasicPropertiesService } from './basic-properties.service';
-import { Observable, of } from 'rxjs';
-import { PropertyGroupTranslatorService } from './property-groups-translator.service';
-import { CardViewItem,ObjectUtils } from '@alfresco/adf-core';
-import { CardViewGroup } from '../interfaces/content-metadata.interfaces';
-import { ContentMetadataConfigFactory } from './config/content-metadata-config.factory';
-import { PropertyDescriptorsService } from './property-descriptors.service';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {MinimalNodeEntryEntity} from 'alfresco-js-api';
+import {BasicPropertiesService} from './basic-properties.service';
+import {Observable, of} from 'rxjs';
+import {PropertyGroupTranslatorService} from './property-groups-translator.service';
+import {CardViewItem, ObjectUtils} from '@alfresco/adf-core';
+import {CardViewGroup, OrganisedPropertyGroup} from '../interfaces/content-metadata.interfaces';
+import {ContentMetadataConfigFactory} from './config/content-metadata-config.factory';
+import {PropertyDescriptorsService} from './property-descriptors.service';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class ContentMetadataService {
@@ -40,24 +40,26 @@ export class ContentMetadataService {
     }
 
     getGroupedProperties(node: MinimalNodeEntryEntity, presetName: string = 'default'): Observable<CardViewGroup[]> {
-        let groupedProperties = of([]);
-
         const config = this.contentMetadataConfigFactory.get(presetName);
-        // let groupNames = ['basic'].concat(node.nodeType);
-        let groupNames = [];
         if (node.aspectNames) {
-            groupNames = groupNames
+            // const groupNames = ['basic']
+            // .concat(node.nodeType)
+            const groupNames = []
                 .concat(node.aspectNames)
                 .filter((groupName) => config.isGroupAllowed(groupName));
+
+            if (groupNames.length > 0) {
+                const propertyValues = this.mergeBasicProperties(node);
+                return this.propertyDescriptorsService.load(groupNames)
+                    .pipe(
+                        map((groups) => config.reorganiseByConfig(groups)),
+                        // map((groups) => this.setTitleToNameIfNotSet(groups)),
+                        map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, propertyValues))
+                    );
+            }
         }
-        if (groupNames.length > 0) {
-            const propertyValues = this.mergeBasicProperties(node);
-            groupedProperties = this.propertyDescriptorsService.load(groupNames).pipe(
-                map((groups) => config.reorganiseByConfig(groups)),
-                map((groups) => this.propertyGroupTranslatorService.translateToCardViewGroups(groups, propertyValues))
-            );
-        }
-        return groupedProperties;
+
+        return of([]);
     }
 
     private mergeBasicProperties(node: MinimalNodeEntryEntity) {
@@ -79,5 +81,12 @@ export class ContentMetadataService {
         }
 
         return ObjectUtils.merge(basicProperties, contentProperties, node.properties);
+    }
+
+    setTitleToNameIfNotSet(propertyGroups: OrganisedPropertyGroup[]): OrganisedPropertyGroup[] {
+        propertyGroups.map((propertyGroup) => {
+            propertyGroup.title = propertyGroup.title || propertyGroup.name;
+        });
+        return propertyGroups;
     }
 }
