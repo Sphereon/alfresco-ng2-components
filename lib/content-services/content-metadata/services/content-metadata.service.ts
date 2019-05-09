@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {MinimalNodeEntryEntity} from 'alfresco-js-api';
-import {BasicPropertiesService} from './basic-properties.service';
-import {Observable, of} from 'rxjs';
-import {PropertyGroupTranslatorService} from './property-groups-translator.service';
-import {CardViewItem, ObjectUtils} from '@alfresco/adf-core';
-import {CardViewGroup, OrganisedPropertyGroup} from '../interfaces/content-metadata.interfaces';
-import {ContentMetadataConfigFactory} from './config/content-metadata-config.factory';
-import {PropertyDescriptorsService} from './property-descriptors.service';
-import {map} from 'rxjs/operators';
+import { CardViewItem, ObjectUtils } from '@alfresco/adf-core';
+import { Injectable } from '@angular/core';
+import { MinimalNodeEntryEntity } from 'alfresco-js-api';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CardViewGroup, OrganisedPropertyGroup } from '../interfaces/content-metadata.interfaces';
+import { BasicPropertiesService } from './basic-properties.service';
+import { ContentMetadataConfigFactory } from './config/content-metadata-config.factory';
+import { PropertyDescriptorsService } from './property-descriptors.service';
+import { PropertyGroupTranslatorService } from './property-groups-translator.service';
 
 @Injectable()
 export class ContentMetadataService {
