@@ -19,20 +19,20 @@ import {
     AfterContentInit, Component, ContentChild, DoCheck, ElementRef, EventEmitter, Input,
     IterableDiffers, OnChanges, Output, SimpleChange, SimpleChanges, TemplateRef, ViewEncapsulation, OnDestroy
 } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material';
-import { Subscription, Observable, Observer } from 'rxjs';
-import { DataColumnListComponent } from '../../../data-column/data-column-list.component';
-import { DataColumn } from '../../data/data-column.model';
-import { DataRowEvent } from '../../data/data-row-event.model';
-import { DataRow } from '../../data/data-row.model';
-import { DataSorting } from '../../data/data-sorting.model';
-import { DataTableAdapter } from '../../data/datatable-adapter';
+import {MatCheckboxChange} from '@angular/material';
+import {Subscription, Observable, Observer} from 'rxjs';
+import {DataColumnListComponent} from '../../../data-column/data-column-list.component';
+import {DataColumn} from '../../data/data-column.model';
+import {DataRowEvent} from '../../data/data-row-event.model';
+import {DataRow} from '../../data/data-row.model';
+import {DataSorting} from '../../data/data-sorting.model';
+import {DataTableAdapter} from '../../data/datatable-adapter';
 
-import { ObjectDataRow } from '../../data/object-datarow.model';
-import { ObjectDataTableAdapter } from '../../data/object-datatable-adapter';
-import { DataCellEvent } from './data-cell.event';
-import { DataRowActionEvent } from './data-row-action.event';
-import { share, buffer, map, filter, debounceTime } from 'rxjs/operators';
+import {ObjectDataRow} from '../../data/object-datarow.model';
+import {ObjectDataTableAdapter} from '../../data/object-datatable-adapter';
+import {DataCellEvent} from './data-cell.event';
+import {DataRowActionEvent} from './data-row-action.event';
+import {share, buffer, map, filter, debounceTime} from 'rxjs/operators';
 
 export enum DisplayMode {
     List = 'list',
@@ -269,7 +269,7 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
 
         this.singleClickStreamSub = singleClickStream.subscribe((obj: DataRowEvent[]) => {
             let event: DataRowEvent = obj[0];
-            this.handleRowSelection(event.value, <MouseEvent | KeyboardEvent> event.event);
+            this.handleRowSelection(event.value, <MouseEvent | KeyboardEvent>event.event);
             this.rowClick.emit(event);
             if (!event.defaultPrevented) {
                 this.elementRef.nativeElement.dispatchEvent(
@@ -359,7 +359,7 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
     public getSchemaFromHtml(): any {
         let schema = [];
         if (this.columnList && this.columnList.columns && this.columnList.columns.length > 0) {
-            schema = this.columnList.columns.map(c => <DataColumn> c);
+            schema = this.columnList.columns.map(c => <DataColumn>c);
         }
         return schema;
     }
@@ -505,12 +505,12 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
 
     onImageLoadingError(event: Event, row: DataRow) {
         if (event) {
-            let element = <any> event.target;
+            let element = <any>event.target;
 
             if (this.fallbackThumbnail) {
                 element.src = this.fallbackThumbnail;
             } else {
-                element.src = row.imageErrorResolver(event);
+                element.src = '//:0';
             }
         }
     }
@@ -526,7 +526,8 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
     asIconValue(row: DataRow, col: DataColumn): string {
         if (this.isIconValue(row, col)) {
             let value = row.getValue(col.key) || '';
-            return value.replace('material-icons://', '');
+            let result = value.replace('material-icons://', '');
+            return result;
         }
         return null;
     }
@@ -683,7 +684,7 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
 
         if (this.display === 'gallery') {
             for (let i = 0; i < maxGalleryRows; i++) {
-               this.fakeRows.push('');
+                this.fakeRows.push('');
             }
         } else {
             this.fakeRows = [];
