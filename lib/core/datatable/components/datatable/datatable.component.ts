@@ -526,8 +526,7 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
     asIconValue(row: DataRow, col: DataColumn): string {
         if (this.isIconValue(row, col)) {
             let value = row.getValue(col.key) || '';
-            let result = value.replace('material-icons://', '');
-            return result;
+            return value.replace('material-icons://', '');
         }
         return null;
     }
