@@ -3,6 +3,7 @@ node_modules
 bundles
 workspace.xml
 .idea/
+*.iml
 dist/
 e2e-output/
 e2e/downloads/
