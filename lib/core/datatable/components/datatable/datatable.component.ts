@@ -510,7 +510,8 @@ export class DataTableComponent implements AfterContentInit, OnChanges, DoCheck,
             if (this.fallbackThumbnail) {
                 element.src = this.fallbackThumbnail;
             } else {
-                element.src = '//:0';
+                /* One pixel transparent PNG. */
+                element.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
             }
         }
     }
